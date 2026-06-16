@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMA ALPHA - Login e Foco (Local)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative">
+
+    <div id="auth-screen" class="min-h-screen flex items-center justify-center p-6 relative z-10">
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-3xl w-full max-w-md shadow-2xl">
+            <div class="flex items-center gap-2 justify-center mb-8">
+                <div class="bg-indigo-600 p-3 rounded-xl">
+                    <i data-lucide="zap" class="text-white w-8 h-8"></i>
+                </div>
+                <span class="font-extrabold text-3xl tracking-tighter">SISTEMA<span class="text-indigo-500">ALPHA</span></span>
+            </div>
+            
+            <h2 class="text-xl font-bold text-center mb-6 text-slate-300">Entre para salvar seu progresso</h2>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-500 mb-1">E-mail</label>
+                    <input type="email" id="email" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="seu@email.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-500 mb-1">Senha</label>
+                    <input type="password" id="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="sua senha aqui">
+                </div>
+                
+                <p id="auth-error" class="text-rose-500 text-sm font-bold text-center hidden">Erro de autenticação.</p>
+
+                <div class="pt-4 flex flex-col gap-3">
+                    <button onclick="window.login()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-colors">
+                        Entrar
+                    </button>
+                    <button onclick="window.register()" class="w-full bg-transparent border border-slate-700 hover:bg-slate-800 text-slate-300 font-bold py-3 rounded-xl transition-colors">
+                        Criar Conta Nova
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-screen" class="hidden">
+        <nav class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+            <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="bg-indigo-600 p-2 rounded-lg">
+                        <i data-lucide="zap" class="text-white"></i>
+                    </div>
+                    <span class="font-extrabold text-xl tracking-tighter">SISTEMA<span class="text-indigo-500">ALPHA</span></span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="text-right">
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Nível</p>
+                        <p id="nav-level" class="text-xl font-black text-indigo-400">1</p>
+                    </div>
+                    <button onclick="window.logout()" class="text-slate-500 hover:text-rose-500 transition-colors">
+                        <i data-lucide="log-out"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="max-w-5xl mx-auto px-6 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-slate-900 border border-orange-500/30 p-6 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i data-lucide="flame" size="80" class="text-orange-500"></i>
+                    </div>
+                    <p class="text-slate-400 font-semibold mb-1">Dias de Ofensiva</p>
+                    <div class="flex items-baseline gap-2">
+                        <h2 id="display-streak" class="text-5xl font-black text-orange-500">0</h2>
+                        <span class="text-orange-300/50 font-bold">DIAS</span>
+                    </div>
+                    <p class="text-xs mt-4 text-orange-200/40">Mantenha o ritmo para dobrar seu XP!</p>
+                </div>
+
+                <div class="bg-slate-900 border border-indigo-500/30 p-6 rounded-3xl md:col-span-2">
+                    <div class="flex justify-between items-end mb-4">
+                        <div>
+                            <p class="text-slate-400 font-semibold mb-1">Experiência Total</p>
+                            <h2 id="display-xp" class="text-4xl font-black text-white">0 <span class="text-lg text-slate-500">XP</span></h2>
+                        </div>
+                        <p id="xp-remaining" class="text-sm text-indigo-300 mb-1 italic">Faltam 1000 XP para o Nível 2</p>
+                    </div>
+                    <div class="w-full bg-slate-800 h-4 rounded-full overflow-hidden p-1">
+                        <div id="xp-bar" class="bg-gradient-to-r from-indigo-600 to-purple-500 h-full rounded-full transition-all duration-700 ease-out progress-glow" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-16">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <i data-lucide="target" class="text-indigo-500"></i> Escolha seu Foco de Hoje (Apenas Um)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <button onclick="window.updateProgress('estudo')" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-emerald-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="bg-emerald-500/10 p-3 rounded-2xl inline-block">
+                                    <i data-lucide="book-open" class="text-emerald-500"></i>
+                                </div>
+                                <i data-lucide="chevron-right" class="text-slate-700 group-hover:text-emerald-500 group-hover:translate-x-2 transition-all"></i>
+                            </div>
+                            <h4 class="text-2xl font-black mb-3 text-white">Melhorar meus Estudos</h4>
+                            
+                            <ul class="text-slate-400 text-sm space-y-2 mb-6 list-disc list-inside border-l-2 border-emerald-900 pl-4">
+                                <li>Idiomas (Duolingo, Anki, Leitura)</li>
+                                <li>Programação (Código, Projeto Pessoal)</li>
+                                <li>Leitura Técnica ou Livro de Desenvolvimento</li>
+                                <li>Cursos Online ou Videoaulas</li>
+                                <li>Revisão de Conteúdo e Resumos</li>
+                            </ul>
+                        </div>
+                        <p class="text-sm font-bold text-emerald-400 mt-auto bg-emerald-950/50 py-2 px-3 rounded-lg inline-block self-start">+150 XP + Bônus Ofensiva</p>
+                    </button>
+
+                    <button onclick="window.updateProgress('treino')" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-rose-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="bg-rose-500/10 p-3 rounded-2xl inline-block">
+                                    <i data-lucide="dumbbell" class="text-rose-500"></i>
+                                </div>
+                                <i data-lucide="chevron-right" class="text-slate-700 group-hover:text-rose-500 group-hover:translate-x-2 transition-all"></i>
+                            </div>
+                            <h4 class="text-2xl font-black mb-3 text-white">Melhorar meus Treinos</h4>
+                            
+                            <ul class="text-slate-400 text-sm space-y-2 mb-6 list-disc list-inside border-l-2 border-rose-900 pl-4">
+                                <li>Musculação (Academia ou Pesos em casa)</li>
+                                <li>Cardio (Corrida, Caminhada Rápida, Bike)</li>
+                                <li>HIIT ou Treino com Peso do Corpo</li>
+                                <li>Yoga / Alongamento Profundo</li>
+                                <li>Esporte Praticado (Futebol, Luta, Tênis)</li>
+                            </ul>
+                        </div>
+                        <p class="text-sm font-bold text-rose-400 mt-auto bg-rose-950/50 py-2 px-3 rounded-lg inline-block self-start">+120 XP + Bônus Ofensiva</p>
+                    </button>
+                    
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden">
+                <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                    <h3 class="text-xl font-bold flex items-center gap-2">
+                        <i data-lucide="trophy" class="text-yellow-500"></i> Ranking Global (Simulado)
+                    </h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-slate-500 text-xs uppercase border-b border-slate-800">
+                                <th class="p-6">Posição</th>
+                                <th class="p-6">Usuário</th>
+                                <th class="p-6">Nível</th>
+                                <th class="p-6 text-right">XP Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <footer class="w-full text-center py-6 border-t border-slate-900 text-slate-600 text-xs font-semibold">
+            Desenvolvido integralmente por Igor Metring e Julia Horing
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+body { 
+    font-family: 'Inter', sans-serif; 
+}
+
+.progress-glow { 
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); 
+}
+
+.hidden { 
+    display: none !important; 
+}
+
