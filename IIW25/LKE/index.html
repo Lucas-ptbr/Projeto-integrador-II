@@ -28,16 +28,16 @@
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-slate-500 mb-1">Senha</label>
-                    <input type="password" id="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="sua senha aqui">
+                    <input type="password" id="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="senha">
                 </div>
                 
                 <p id="auth-error" class="text-rose-500 text-sm font-bold text-center hidden">Erro de autenticação.</p>
 
                 <div class="pt-4 flex flex-col gap-3">
-                    <button onclick="window.login()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-colors">
+                    <button onclick="acaoLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-colors">
                         Entrar
                     </button>
-                    <button onclick="window.register()" class="w-full bg-transparent border border-slate-700 hover:bg-slate-800 text-slate-300 font-bold py-3 rounded-xl transition-colors">
+                    <button onclick="acaoCadastro()" class="w-full bg-transparent border border-slate-700 hover:bg-slate-800 text-slate-300 font-bold py-3 rounded-xl transition-colors">
                         Criar Conta Nova
                     </button>
                 </div>
@@ -59,7 +59,7 @@
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Nível</p>
                         <p id="nav-level" class="text-xl font-black text-indigo-400">1</p>
                     </div>
-                    <button onclick="window.logout()" class="text-slate-500 hover:text-rose-500 transition-colors">
+                    <button onclick="acaoLogout()" class="text-slate-500 hover:text-rose-500 transition-colors">
                         <i data-lucide="log-out"></i>
                     </button>
                 </div>
@@ -100,7 +100,7 @@
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
-                    <button onclick="window.updateProgress('estudo')" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-emerald-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
+                    <button onclick="registrarProgressoDeFoco('estudo')" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-emerald-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="bg-emerald-500/10 p-3 rounded-2xl inline-block">
@@ -121,7 +121,7 @@
                         <p class="text-sm font-bold text-emerald-400 mt-auto bg-emerald-950/50 py-2 px-3 rounded-lg inline-block self-start">+150 XP + Bônus Ofensiva</p>
                     </button>
 
-                    <button onclick="window.updateProgress('treino')" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-rose-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
+                    <button onclick="registrarProgressoDeFoco('treino')" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-rose-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="bg-rose-500/10 p-3 rounded-2xl inline-block">
@@ -168,7 +168,7 @@
         </main>
 
         <footer class="w-full text-center py-6 border-t border-slate-900 text-slate-600 text-xs font-semibold">
-            Desenvolvido integralmente por Igor Metring e Julia Horing
+            Desenvolvido integralmente por Lucas Ferreira, Kayo Motta, Eiti Kussano
         </footer>
     </div>
 
