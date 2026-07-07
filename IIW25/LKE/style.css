@@ -1,33 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 
-/* Configuracoes Gerais do Projeto */
 body { 
     font-family: 'Inter', sans-serif; 
 }
 
-/* Efeito neon da barra de XP */
 .progress-glow { 
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); 
 }
 
-/* Classe utilitaria para sumir com as telas no JS */
 .hidden { 
     display: none !important; 
 }
-
-/* Customizacao da barra de rolagem da tabela pro layout escuro */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-::-webkit-scrollbar-track {
-    background: #0f172a; 
-}
-::-webkit-scrollbar-thumb {
-    background: #1e293b; 
-    border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #334155; 
-}
-

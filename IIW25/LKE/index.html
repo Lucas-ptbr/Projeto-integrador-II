@@ -18,7 +18,7 @@
                 </div>
                 <span class="font-extrabold text-3xl tracking-tighter">SISTEMA<span class="text-indigo-500">ALPHA</span></span>
             </div>
-            
+
             <h2 class="text-xl font-bold text-center mb-6 text-slate-300">Entre para salvar seu progresso</h2>
 
             <div class="space-y-4">
@@ -28,16 +28,16 @@
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-slate-500 mb-1">Senha</label>
-                    <input type="password" id="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="senha">
+                    <input type="password" id="password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="sua senha aqui">
                 </div>
-                
+
                 <p id="auth-error" class="text-rose-500 text-sm font-bold text-center hidden">Erro de autenticação.</p>
 
                 <div class="pt-4 flex flex-col gap-3">
-                    <button onclick="acaoLogin()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-colors">
+                    <button onclick="window.login()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition-colors">
                         Entrar
                     </button>
-                    <button onclick="acaoCadastro()" class="w-full bg-transparent border border-slate-700 hover:bg-slate-800 text-slate-300 font-bold py-3 rounded-xl transition-colors">
+                    <button onclick="window.register()" class="w-full bg-transparent border border-slate-700 hover:bg-slate-800 text-slate-300 font-bold py-3 rounded-xl transition-colors">
                         Criar Conta Nova
                     </button>
                 </div>
@@ -59,7 +59,7 @@
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Nível</p>
                         <p id="nav-level" class="text-xl font-black text-indigo-400">1</p>
                     </div>
-                    <button onclick="acaoLogout()" class="text-slate-500 hover:text-rose-500 transition-colors">
+                    <button onclick="window.logout()" class="text-slate-500 hover:text-rose-500 transition-colors">
                         <i data-lucide="log-out"></i>
                     </button>
                 </div>
@@ -96,11 +96,11 @@
 
             <div class="mb-16">
                 <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <i data-lucide="target" class="text-indigo-500"></i> Escolha seu Foco de Hoje (Apenas Um)
+                    <i data-lucide="target" class="text-indigo-500"></i> Escolha seu Foco de Hoje
                 </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <button onclick="registrarProgressoDeFoco('estudo')" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-emerald-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
+                <div class="grid grid-cols-1 gap-6">
+
+                    <a href="quiz.html" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-emerald-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="bg-emerald-500/10 p-3 rounded-2xl inline-block">
@@ -109,7 +109,7 @@
                                 <i data-lucide="chevron-right" class="text-slate-700 group-hover:text-emerald-500 group-hover:translate-x-2 transition-all"></i>
                             </div>
                             <h4 class="text-2xl font-black mb-3 text-white">Melhorar meus Estudos</h4>
-                            
+
                             <ul class="text-slate-400 text-sm space-y-2 mb-6 list-disc list-inside border-l-2 border-emerald-900 pl-4">
                                 <li>Idiomas (Duolingo, Anki, Leitura)</li>
                                 <li>Programação (Código, Projeto Pessoal)</li>
@@ -118,30 +118,9 @@
                                 <li>Revisão de Conteúdo e Resumos</li>
                             </ul>
                         </div>
-                        <p class="text-sm font-bold text-emerald-400 mt-auto bg-emerald-950/50 py-2 px-3 rounded-lg inline-block self-start">+150 XP + Bônus Ofensiva</p>
-                    </button>
+                        <p class="text-sm font-bold text-emerald-400 mt-auto bg-emerald-950/50 py-2 px-3 rounded-lg inline-block self-start">Responda o Quiz e ganhe até +150 XP + Bônus Ofensiva</p>
+                    </a>
 
-                    <button onclick="registrarProgressoDeFoco('treino')" class="group relative bg-slate-900 hover:bg-slate-800 border-2 border-slate-800 hover:border-rose-500 p-8 rounded-3xl transition-all text-left overflow-hidden h-full flex flex-col justify-between">
-                        <div class="relative z-10">
-                            <div class="flex items-center justify-between mb-4">
-                                <div class="bg-rose-500/10 p-3 rounded-2xl inline-block">
-                                    <i data-lucide="dumbbell" class="text-rose-500"></i>
-                                </div>
-                                <i data-lucide="chevron-right" class="text-slate-700 group-hover:text-rose-500 group-hover:translate-x-2 transition-all"></i>
-                            </div>
-                            <h4 class="text-2xl font-black mb-3 text-white">Melhorar meus Treinos</h4>
-                            
-                            <ul class="text-slate-400 text-sm space-y-2 mb-6 list-disc list-inside border-l-2 border-rose-900 pl-4">
-                                <li>Musculação (Academia ou Pesos em casa)</li>
-                                <li>Cardio (Corrida, Caminhada Rápida, Bike)</li>
-                                <li>HIIT ou Treino com Peso do Corpo</li>
-                                <li>Yoga / Alongamento Profundo</li>
-                                <li>Esporte Praticado (Futebol, Luta, Tênis)</li>
-                            </ul>
-                        </div>
-                        <p class="text-sm font-bold text-rose-400 mt-auto bg-rose-950/50 py-2 px-3 rounded-lg inline-block self-start">+120 XP + Bônus Ofensiva</p>
-                    </button>
-                    
                 </div>
             </div>
 
@@ -168,7 +147,7 @@
         </main>
 
         <footer class="w-full text-center py-6 border-t border-slate-900 text-slate-600 text-xs font-semibold">
-            Desenvolvido integralmente por Lucas Ferreira, Kayo Motta, Eiti Kussano
+            Desenvolvido integralmente por Igor Metring e Julia Horing
         </footer>
     </div>
 
