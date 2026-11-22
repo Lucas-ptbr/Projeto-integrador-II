@@ -1,3 +1,7 @@
+const SUPABASE_URL = 'COLE_SUA_PROJECT_URL_AQUI';
+const SUPABASE_KEY = 'COLE_SUA_ANON_KEY_AQUI';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const XP_PER_LEVEL = 1000;
 const MAX_XP = 150;
 
@@ -122,31 +126,35 @@ function finishQuiz() {
     lucide.createIcons();
 }
 
-function applyXP(xpEarned) {
+async function applyXP(xpEarned) {
     const email = sessionStorage.getItem('active_session');
     if (!email) return;
-    const db = JSON.parse(localStorage.getItem('local_users')) || {};
-    const user = db[email];
-    if (!user) return;
 
-    const now = new Date();
-    const today = now.toLocaleDateString();
+    const { data: user, error } = await db
+        .from('usuarios')
+        .select('*')
+        .eq('email', email)
+        .single();
 
-    if (user.lastDate !== today) {
-        const yesterday = new Date();
-        yesterday.setDate(now.getDate() - 1);
-        if (user.lastDate === yesterday.toLocaleDateString()) {
-            user.streak += 1;
-        } else {
-            user.streak = 1;
-        }
-        user.lastDate = today;
+    if (error || !user) return;
+
+    const today = new Date().toISOString().split('T')[0];
+    const yesterdayDate = new Date();
+    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+    const yesterday = yesterdayDate.toISOString().split('T')[0];
+
+    let newStreak = user.streak;
+    if (user.last_date !== today) {
+        newStreak = (user.last_date === yesterday) ? user.streak + 1 : 1;
     }
 
-    user.xp += xpEarned + (user.streak * 10);
-    user.level = Math.floor(user.xp / XP_PER_LEVEL) + 1;
-    db[email] = user;
-    localStorage.setItem('local_users', JSON.stringify(db));
+    const newXP = user.xp + xpEarned + (newStreak * 10);
+    const newLevel = Math.floor(newXP / XP_PER_LEVEL) + 1;
+
+    await db
+        .from('usuarios')
+        .update({ xp: newXP, level: newLevel, streak: newStreak, last_date: today })
+        .eq('email', email);
 }
 
 lucide.createIcons();
