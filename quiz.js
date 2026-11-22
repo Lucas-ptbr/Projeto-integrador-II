@@ -1,5 +1,5 @@
-const SUPABASE_URL = 'COLE_SUA_PROJECT_URL_AQUI';
-const SUPABASE_KEY = 'COLE_SUA_ANON_KEY_AQUI';
+const SUPABASE_URL = https://jhfimjnshedtusmckyyr.supabase.co;
+const SUPABASE_KEY = sb_publishable_Capr8UU6DwPd7MvOKKQfeQ_kk-7W7fX;
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const XP_PER_LEVEL = 1000;
