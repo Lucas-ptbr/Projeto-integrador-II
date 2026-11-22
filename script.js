@@ -105,6 +105,13 @@ window.register = async () => {
         errorEl.classList.remove('hidden');
         return;
     }
+    if (error) {
+    console.error(error);
+    errorEl.innerText = error.code === '23505'
+        ? "Este e-mail já está cadastrado. Clique em Entrar."
+        : "Erro do Supabase: " + error.message;
+    errorEl.classList.remove('hidden');
+}
 
     const { error } = await db
         .from('usuarios')
