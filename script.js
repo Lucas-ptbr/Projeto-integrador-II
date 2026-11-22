@@ -1,16 +1,11 @@
+const SUPABASE_URL = 'COLE_SUA_PROJECT_URL_AQUI';
+const SUPABASE_KEY = 'COLE_SUA_ANON_KEY_AQUI';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 const XP_PER_LEVEL = 1000;
 let loggedUserEmail = null;
 
 lucide.createIcons();
-
-if (!localStorage.getItem('local_users')) {
-    const fakeUsers = {
-        "pedro@alpha.com": { email: "pedro@alpha.com", password: "123", xp: 3250, level: 4, streak: 5, lastDate: null },
-        "mariana@alpha.com": { email: "mariana@alpha.com", password: "123", xp: 2100, level: 3, streak: 3, lastDate: null },
-        "igor@alpha.com": { email: "igor@alpha.com", password: "123", xp: 1850, level: 2, streak: 2, lastDate: null }
-    };
-    localStorage.setItem('local_users', JSON.stringify(fakeUsers));
-}
 
 window.onload = function () {
     const session = sessionStorage.getItem('active_session');
@@ -27,18 +22,14 @@ function toggleScreens(isLoggedIn) {
     document.getElementById('app-screen').classList.toggle('hidden', !isLoggedIn);
 }
 
-function getUsersDB() {
-    return JSON.parse(localStorage.getItem('local_users')) || {};
-}
+async function updateUI() {
+    const { data: user, error } = await db
+        .from('usuarios')
+        .select('*')
+        .eq('email', loggedUserEmail)
+        .single();
 
-function saveUsersDB(db) {
-    localStorage.setItem('local_users', JSON.stringify(db));
-}
-
-function updateUI() {
-    const db = getUsersDB();
-    const user = db[loggedUserEmail];
-    if (!user) return;
+    if (error || !user) return;
 
     document.getElementById('display-xp').innerHTML = `${user.xp} <span class="text-lg text-slate-500">XP</span>`;
     document.getElementById('display-streak').innerText = user.streak;
@@ -49,12 +40,17 @@ function updateUI() {
     document.getElementById('xp-remaining').innerText = `Faltam ${XP_PER_LEVEL - currentLevelXP} XP para o Nível ${user.level + 1}`;
 }
 
-function loadLeaderboard() {
+async function loadLeaderboard() {
     const tbody = document.getElementById('leaderboard-body');
     tbody.innerHTML = '';
 
-    const db = getUsersDB();
-    const sortedUsers = Object.values(db).sort((a, b) => b.xp - a.xp);
+    const { data: sortedUsers, error } = await db
+        .from('usuarios')
+        .select('email, xp, level')
+        .order('xp', { ascending: false })
+        .limit(20);
+
+    if (error || !sortedUsers) return;
 
     sortedUsers.forEach((user, index) => {
         const isMe = user.email === loggedUserEmail;
@@ -74,14 +70,19 @@ function loadLeaderboard() {
     });
 }
 
-window.login = () => {
+window.login = async () => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const errorEl = document.getElementById('auth-error');
 
-    const db = getUsersDB();
+    const { data: user, error } = await db
+        .from('usuarios')
+        .select('*')
+        .eq('email', email)
+        .eq('password', password)
+        .single();
 
-    if (db[email] && db[email].password === password) {
+    if (user && !error) {
         loggedUserEmail = email;
         sessionStorage.setItem('active_session', email);
         errorEl.classList.add('hidden');
@@ -94,33 +95,25 @@ window.login = () => {
     }
 };
 
-window.register = () => {
+window.register = async () => {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const errorEl = document.getElementById('auth-error');
 
     if (!email || password.length < 3) {
-        errorEl.innerText = "Erro ao criar: Digite um e-mail válido e uma senha com mais de 3 dígitos.";
+        errorEl.innerText = "Digite um e-mail válido e uma senha com mais de 3 dígitos.";
         errorEl.classList.remove('hidden');
         return;
     }
 
-    const db = getUsersDB();
+    const { error } = await db
+        .from('usuarios')
+        .insert([{ email, password }]);
 
-    if (db[email]) {
+    if (error) {
         errorEl.innerText = "Erro ao criar: Este e-mail já está cadastrado.";
         errorEl.classList.remove('hidden');
     } else {
-        db[email] = {
-            email: email,
-            password: password,
-            xp: 0,
-            level: 1,
-            streak: 0,
-            lastDate: null
-        };
-        saveUsersDB(db);
-
         loggedUserEmail = email;
         sessionStorage.setItem('active_session', email);
         errorEl.classList.add('hidden');
@@ -136,38 +129,4 @@ window.logout = () => {
     toggleScreens(false);
     document.getElementById('email').value = '';
     document.getElementById('password').value = '';
-};
-
-window.updateProgress = (type) => {
-    const db = getUsersDB();
-    const user = db[loggedUserEmail];
-    if (!user) return;
-
-    const now = new Date();
-    const today = now.toLocaleDateString();
-
-    if (user.lastDate === today) {
-        alert("Ótimo trabalho! Você já garantiu seu foco de hoje. Descanse e volte amanhã!");
-        return;
-    }
-
-    const yesterday = new Date();
-    yesterday.setDate(now.getDate() - 1);
-
-    if (user.lastDate === yesterday.toLocaleDateString()) {
-        user.streak += 1;
-    } else {
-        user.streak = 1;
-    }
-
-    const baseXP = type === 'estudo' ? 150 : 120;
-    user.xp += (baseXP + (user.streak * 10));
-    user.level = Math.floor(user.xp / XP_PER_LEVEL) + 1;
-    user.lastDate = today;
-
-    db[loggedUserEmail] = user;
-    saveUsersDB(db);
-
-    updateUI();
-    loadLeaderboard();
 };
